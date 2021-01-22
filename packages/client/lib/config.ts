@@ -282,7 +282,7 @@ export class Config {
     if (option !== undefined) return option
     return this.chainCommon.chainName() === 'mainnet'
   }
-  
+
   getNetworkDir(): string {
     const networkDirName = this.common.chainName()
     const dataDir = `${this.datadir}/${networkDirName}`
