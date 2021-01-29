@@ -3,7 +3,7 @@
 import { BaseTrie as Trie } from '@ethereumjs/trie'
 import { Address, BN, rlp, keccak256, KECCAK256_RLP } from 'ethereumjs-util'
 import Common from '@ethereumjs/common'
-import { Transaction, TxOptions } from '@ethereumjs/tx'
+import { TransactionFactory, Transaction, TxOptions } from '@ethereumjs/tx'
 import { BlockHeader } from './header'
 import { BlockData, BlockOptions, JsonBlock, BlockBuffer, Blockchain } from './types'
 
@@ -25,7 +25,7 @@ export class Block {
     // parse transactions
     const transactions = []
     for (const txData of txsData || []) {
-      const tx = Transaction.fromTxData(txData, opts as TxOptions)
+      const tx = TransactionFactory.fromTxData(txData, opts as TxOptions)
       transactions.push(tx)
     }
 
@@ -65,7 +65,7 @@ export class Block {
     // parse transactions
     const transactions = []
     for (const txData of txsData || []) {
-      transactions.push(Transaction.fromValuesArray(txData, opts))
+      transactions.push(TransactionFactory.fromBlockBodyData(txData, opts))
     }
 
     // parse uncle headers
@@ -224,7 +224,7 @@ export class Block {
     const errors: string[] = []
 
     this.transactions.forEach(function (tx, i) {
-      const errs = tx.validate(true)
+      const errs = <string[]>tx.validate(true)
       if (errs.length > 0) {
         errors.push(`errors at tx ${i}: ${errs.join(', ')}`)
       }
