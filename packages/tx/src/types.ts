@@ -35,6 +35,33 @@ export interface BaseTxOptions {
   common?: Common
 }
 
+export type AccessListItem = {
+  address: string
+  storageKeys: string[]
+}
+
+export type AccessListBufferItem = [Buffer, Buffer[]]
+
+export type AccessList = AccessListItem[]
+export type AccessListBuffer = AccessListBufferItem[]
+
+export function isAccessListBuffer(
+  input: AccessListBuffer | AccessList
+): input is AccessListBuffer {
+  if (input.length === 0) {
+    return true
+  }
+  const firstItem = input[0]
+  if (Array.isArray(firstItem)) {
+    return true
+  }
+  return false
+}
+
+export function isAccessList(input: AccessListBuffer | AccessList): input is AccessList {
+  return !isAccessListBuffer(input) // This is exactly the same method, except the output is negated.
+}
+
 /**
  * An object with an optional field with each of the transaction's values.
  */
@@ -92,7 +119,7 @@ export interface TxData {
   /**
    * The access list which contains the addresses/storage slots which the transaction wishes to access
    */
-  accessList?: any // TODO: typesafe this
+  accessList?: AccessListBuffer | AccessList
 
   /**
    * The transaction type
