@@ -2,7 +2,7 @@ import assert from 'assert'
 import * as path from 'path'
 import * as fs from 'fs'
 import { Account, Address, BN, privateToAddress, bufferToHex } from 'ethereumjs-util'
-import { Transaction } from '@ethereumjs/tx'
+import { LegacyTransaction } from '@ethereumjs/tx'
 import VM from '../../dist'
 
 const abi = require('ethereumjs-abi')
@@ -97,7 +97,7 @@ async function deployContract(
     nonce: await getAccountNonce(vm, senderPrivateKey),
   }
 
-  const tx = Transaction.fromTxData(txData).sign(senderPrivateKey)
+  const tx = LegacyTransaction.fromTxData(txData).sign(senderPrivateKey)
 
   const deploymentResult = await vm.runTx({ tx })
 
@@ -124,7 +124,7 @@ async function setGreeting(
     nonce: await getAccountNonce(vm, senderPrivateKey),
   }
 
-  const tx = Transaction.fromTxData(txData).sign(senderPrivateKey)
+  const tx = LegacyTransaction.fromTxData(txData).sign(senderPrivateKey)
 
   const setGreetingResult = await vm.runTx({ tx })
 
